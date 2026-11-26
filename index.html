@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#241344">
+  <meta name="description" content="فلتة - لعبة جماعية مليئة بالتحديات والمفاجآت">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <title>فلتة | لعبة جماعية</title>
+  <style>
+    :root{color-scheme:dark;--bg:#160d2c;--panel:#241344;--purple:#7544ed;--orange:#f28a38;--cyan:#53d8df;--yellow:#ffd65a;--text:#fff;--muted:#c9bbdf}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 0,#382064 0,#160d2c 48%);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,sans-serif;color:var(--text);min-height:100vh}
+    .wrap{max-width:520px;margin:auto;padding:18px 16px 36px}.top{display:flex;align-items:center;justify-content:space-between;margin:6px 0 22px}
+    .logo{font-size:34px;font-weight:1000;letter-spacing:1px}.pill{font-size:12px;background:#2d2050;border:1px solid #5a4386;padding:7px 11px;border-radius:30px;color:#d9caff}
+    .hero{background:linear-gradient(140deg,#7544ed,#39206c 70%);border:1px solid #9b7af1;border-radius:25px;padding:24px 20px;text-align:center;box-shadow:0 18px 45px #09041488}
+    h1{font-size:29px;margin:0 0 8px;color:var(--yellow)}.hero p{color:#eee7ff;margin:0;line-height:1.7;font-size:14px}
+    .dice{font-size:55px;margin:12px 0 3px;filter:drop-shadow(0 5px 7px #180b35)}
+    .section{font-size:17px;font-weight:800;margin:23px 2px 12px}.btn{border:0;width:100%;padding:16px 15px;border-radius:16px;color:white;font-size:16px;font-weight:800;margin:7px 0;cursor:pointer}
+    .primary{background:linear-gradient(100deg,#7544ed,#925ef5)}.orange{background:linear-gradient(100deg,#e8792d,#f5a14b)}.ghost{background:#30214e;border:1px solid #554276}
+    .row{display:flex;gap:9px}.row>*{flex:1}.card{background:#24183d;border:1px solid #493568;border-radius:18px;padding:16px;margin-top:12px}
+    .muted{color:var(--muted);font-size:13px;line-height:1.7}.choices{display:flex;gap:8px;margin:10px 0}.choice{flex:1;padding:12px 5px;background:#30214e;border:1px solid #594579;border-radius:13px;color:#fff;font-weight:800}
+    .choice.active{background:#7544ed;border-color:#c2aaff}.code{font-size:27px;letter-spacing:2px;color:var(--yellow);font-weight:900;text-align:center;padding:14px}
+    .challenge{background:linear-gradient(145deg,#7040e8,#38205f);border:1px solid #9c7df0;border-radius:22px;padding:23px 17px;text-align:center;margin:14px 0}
+    .tag{color:var(--yellow);font-size:13px;font-weight:800}.challenge h2{font-size:25px;margin:12px 0}.challenge p{line-height:1.8;font-size:17px}
+    .score{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #44315f}.hidden{display:none!important}
+    input{width:100%;padding:14px;border-radius:12px;border:1px solid #594579;background:#1a1030;color:#fff;font-size:16px;margin:8px 0}
+    .footer{text-align:center;color:#a99abd;font-size:11px;margin-top:24px}
+  </style>
+</head>
+<body>
+<main class="wrap">
+  <header class="top"><div class="logo">فَـلْـتَـة!</div><div class="pill">نسخة تجريبية 0.1</div></header>
+
+  <section id="home">
+    <div class="hero"><div class="dice">🎲</div><h1>مستعد للفوضى؟</h1><p>تحديات ذكاء وسرعة وضحك... ومفاجآت تقلب النتيجة بآخر لحظة!</p></div>
+    <div class="section">اختر طريقة اللعب</div>
+    <button class="btn primary" onclick="openSetup('quick')">⚡ لعب سريع</button>
+    <button class="btn orange" onclick="openSetup('private')">👥 غرفة خاصة مع أصحابك</button>
+    <div class="section">خلطة فلتة</div>
+    <div class="row"><div class="card">🧠<br><b>ذكاء</b><div class="muted">ألغاز وتفكير</div></div><div class="card">😂<br><b>ضحك</b><div class="muted">مواقف وتحديات</div></div><div class="card">🎁<br><b>مفاجآت</b><div class="muted">قلب للطاولة</div></div></div>
+  </section>
+
+  <section id="setup" class="hidden">
+    <button class="btn ghost" onclick="show('home')">← رجوع</button>
+    <div class="section">إعداد المباراة</div>
+    <div class="card"><div class="muted">عدد اللاعبين</div><div class="choices" id="playerChoices"><button class="choice" onclick="setPlayers(2)">2</button><button class="choice active" onclick="setPlayers(4)">4</button><button class="choice" onclick="setPlayers(6)">6</button><button class="choice" onclick="setPlayers(8)">8</button></div>
+    <div class="muted">اسمك في اللعبة</div><input id="playerName" maxlength="16" placeholder="اكتب اسمك أو لقبك" value="اللاعب 1"></div>
+    <button class="btn primary" onclick="createRoom()">متابعة 🚀</button>
+  </section>
+
+  <section id="lobby" class="hidden">
+    <button class="btn ghost" onclick="show('setup')">← رجوع</button>
+    <div class="hero"><div class="tag">غرفتك التجريبية</div><div class="code" id="roomCode">FALTA-4821</div><p>شارك الرمز مع أصحابك. في هذه النسخة، الغرفة محاكاة محلية وليست اتصالاً حقيقياً بعد.</p></div>
+    <button class="btn ghost" onclick="copyCode()">📋 نسخ رمز الغرفة</button>
+    <button class="btn primary" onclick="startGame()">ابدأ التحديات 🎲</button>
+  </section>
+
+  <section id="game" class="hidden">
+    <div class="top"><b id="roundLabel">الجولة 1 من 5</b><span class="pill">❤️ ❤️ ❤️</span></div>
+    <div class="challenge"><div class="tag" id="challengeType">تحدي سرعة</div><h2 id="challengeTitle">اختبار السرعة</h2><p id="challengeText">اذكر خمسة أشياء تبدأ بحرف الميم خلال 10 ثوانٍ!</p></div>
+    <div id="surpriseBox" class="card hidden"><div class="tag">💥 مفاجأة فلتة!</div><p id="surpriseText"></p></div>
+    <button id="revealBtn" class="btn orange" onclick="revealSurprise()">اكشف المفاجأة 🎁</button>
+    <button id="nextBtn" class="btn primary hidden" onclick="nextRound()">التحدي التالي ←</button>
+  </section>
+
+  <section id="results" class="hidden">
+    <div class="hero"><div class="dice">🏆</div><h1>انتهت المباراة!</h1><p>هذه أول تجربة لفلتة. في النسخة المتصلة سنضيف ترتيب اللاعبين والنقاط الحقيقية.</p></div>
+    <div class="card"><div class="score"><b>جولات مكتملة</b><b>5 / 5</b></div><div class="score"><b>نظام المباراة</b><b>نقاط + قلوب</b></div><div class="score"><b>الجولة الأخيرة</b><b>نقاط مضاعفة</b></div></div>
+    <button class="btn primary" onclick="resetGame()">العب من جديد</button>
+    <button class="btn ghost" onclick="show('home')">الرئيسية</button>
+  </section>
+  <div class="footer">فلتة © — لعبة جماعية من ابتكارنا</div>
+</main>
+<script>
+const challenges=[
+ {type:"سرعة ⚡",title:"اختبار السرعة",text:"اذكر خمسة أشياء تبدأ بحرف الميم خلال 10 ثوانٍ!",surprise:"تبديل مفاجئ! اللاعب الذي يجيب أخيراً يخسر قلباً، والأسرع يحصل على 3 نقاط."},
+ {type:"ذكاء 🧠",title:"لغز سريع",text:"شيء كلما أخذت منه كبر... ما هو؟",surprise:"مساعدة سرية! يحق لك طلب أول حرف، لكن إجابتك الصحيحة تصبح بنقطة واحدة فقط."},
+ {type:"ضحك 😂",title:"لا تضحك!",text:"قل جملة مضحكة بوجه جاد لمدة 15 ثانية.",surprise:"قلب الطاولة! إذا ضحكت تخسر نقطتين، وإذا صمدت تكسب 3 نقاط."},
+ {type:"ذاكرة 👀",title:"ذاكرة فلتة",text:"احفظ الكلمات: قمر، مفتاح، بحر، سيارة، تفاحة. ثم رددها بالعكس!",surprise:"مهمة سرية! اللاعب التالي يختار كلمة إضافية لازم تتذكرها."},
+ {type:"الجولة الكبرى 👑",title:"الكل أو لا شيء",text:"اخترع اسمًا مضحكًا لفريقك خلال 5 ثوانٍ!",surprise:"النقاط مضاعفة! هذه الجولة قد تغيّر الفائز بالكامل."}
+];
+let selectedPlayers=4,round=0,mode="private",roomCode="FALTA-4821";
+function show(id){["home","setup","lobby","game","results"].forEach(x=>document.getElementById(x).classList.toggle("hidden",x!==id))}
+function openSetup(m){mode=m;show("setup")}
+function setPlayers(n){selectedPlayers=n;document.querySelectorAll("#playerChoices .choice").forEach(b=>b.classList.toggle("active",b.textContent==n))}
+function createRoom(){roomCode="FALTA-"+Math.floor(1000+Math.random()*9000);document.getElementById("roomCode").textContent=roomCode;show("lobby")}
+function copyCode(){if(navigator.clipboard)navigator.clipboard.writeText(roomCode).then(()=>alert("تم نسخ الرمز"));else alert("رمز الغرفة: "+roomCode)}
+function startGame(){round=0;loadRound();show("game")}
+function loadRound(){let c=challenges[round];document.getElementById("roundLabel").textContent=`الجولة ${round+1} من 5`;document.getElementById("challengeType").textContent=c.type;document.getElementById("challengeTitle").textContent=c.title;document.getElementById("challengeText").textContent=c.text;document.getElementById("surpriseText").textContent=c.surprise;document.getElementById("surpriseBox").classList.add("hidden");document.getElementById("revealBtn").classList.remove("hidden");document.getElementById("nextBtn").classList.add("hidden")}
+function revealSurprise(){document.getElementById("surpriseBox").classList.remove("hidden");document.getElementById("revealBtn").classList.add("hidden");document.getElementById("nextBtn").classList.remove("hidden")}
+function nextRound(){round++;if(round>=5)show("results");else loadRound()}
+function resetGame(){round=0;show("home")}
+if("serviceWorker" in navigator && location.protocol.startsWith("http"))window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+</script>
+</body>
+</html>

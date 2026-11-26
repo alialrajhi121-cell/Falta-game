@@ -1,0 +1,11 @@
+{
+  "name": "فلتة - لعبة جماعية",
+  "short_name": "فلتة",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#160d2c",
+  "theme_color": "#241344",
+  "icons": [{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
